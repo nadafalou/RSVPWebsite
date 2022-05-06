@@ -1,31 +1,41 @@
 from rest_framework import serializers
-from invites.models import Guest
+from invites.models import Invite, Event
 
-class GuestSerializer(serializers.ModelSerializer):
+class InviteSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = Guest
+        model = Invite
         fields = '__all__'
 
-class CreateGuestSerializer(serializers.ModelSerializer):
+
+class EventSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = Guest
-        fields = ['names', 'invitedNum']
+        model = Event
+        fields = '__all__'
+
+
+class CreateInviteSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Invite
+        fields = ['event', 'names', 'invitedNum']
         extra_kwargs = {
             'names': {'required': True}, 
             'invitedNum': {'required': True}, 
+            'event': {'required': True}, 
         }
 
     def create(self, validated_data):
-        return Guest.objects.create(
+        return Invite.objects.create(
             names=validated_data['names'],
-            invitedNum=validated_data['invitedNum']
+            invitedNum=validated_data['invitedNum'],
+            event=validated_data['event']
         )
 
-class UpdateGuestSerializer(serializers.ModelSerializer):
+class UpdateInviteSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Guest
+        model = Invite
         fields = ['replied', 'requestedSong', 'confirmedNum', 'allergies']
     
