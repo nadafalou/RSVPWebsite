@@ -1,5 +1,7 @@
+from operator import inv
 from rest_framework import serializers
 from invites.models import Invite, Event
+from django.db.models import Sum
 
 class InviteSerializer(serializers.ModelSerializer):
     
@@ -9,10 +11,25 @@ class InviteSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
+    invites = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    # print(type(invites))
+    confirmedNum = serializers.IntegerField(source='total_confirmed')
     
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = ('name', 'datetime', 'invites', 'confirmedNum')
+        extra_kwargs = {
+            'name': {'required': True}, 
+            'datetime': {'required': True}, 
+            'invites': {'required': False}, 
+        }
+
+
+class CreateEventSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Event
+        fields = ('name', 'datetime')
 
 
 class CreateInviteSerializer(serializers.ModelSerializer):
