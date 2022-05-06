@@ -1,0 +1,6 @@
+db.sqlite3
+RSVPBackend/__init__.py
+RSVPBackend/__pycache__/*
+invites/__init__.py
+invites/__pycache__/*
+invites/migrations/*
